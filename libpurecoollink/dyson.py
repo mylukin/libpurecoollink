@@ -14,22 +14,20 @@ from .exceptions import DysonNotLoggedException
 
 _LOGGER = logging.getLogger(__name__)
 
-DYSON_API_URL = "api.cp.dyson.com"
+DYSON_API_URL = "api.cp.dyson.cn"
 
 
 class DysonAccount:
     """Dyson account."""
 
-    def __init__(self, email, password, country):
+    def __init__(self, email, password):
         """Create a new Dyson account.
 
         :param email: User email
         :param password: User password
-        :param country: 2 characters language code
         """
         self._email = email
         self._password = password
-        self._country = country
         self._logged = False
         self._auth = None
 
@@ -40,8 +38,8 @@ class DysonAccount:
             "Password": self._password
         }
         login = requests.post(
-            "https://{0}/v1/userregistration/authenticate?country={1}".format(
-                DYSON_API_URL, self._country), request_body, verify=False)
+            "https://{0}/v1/userregistration/authenticate".format(
+                DYSON_API_URL), request_body, verify=False)
         # pylint: disable=no-member
         if login.status_code == requests.codes.ok:
             json_response = login.json()
